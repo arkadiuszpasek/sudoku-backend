@@ -4,6 +4,11 @@
 
 - Feel free to extend console/ scripts for manual testing locally, run with `go run .`
 - Testing should be done, run with `go test .`
+- Running locally done with docker and `sam local start-api`
+
+```
+sam local start-api  --warm-containers EAGER --template ./sam-template.yml --host 0.0.0.0 --port 4001
+```
 
 ## Deploying
 
