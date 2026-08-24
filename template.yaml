@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Independent Go Lambda functions, each in its own directory,
+  each exposed over HTTP through API Gateway.
+
+Globals:
+  Function:
+    Timeout: 5
+    MemorySize: 128
+    Runtime: provided.al2023
+    Architectures:
+      - x86_64
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cmd/hello/
+      Handler: bootstrap
+      Events:
+        HelloWorld1Api:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      BuildMethod: go1.x
+
+  GenerateBoardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cmd/generate-board/
+      Handler: bootstrap
+      Events:
+        GenerateBoardApi:
+          Type: Api
+          Properties:
+            Path: /generate-board
+            Method: get
+    Metadata:
+      BuildMethod: go1.x
+
+Outputs:
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Hello World
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello"
+  GenerateBoardApi:
+    Description: API Gateway endpoint URL for Generate Board
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate-board"
